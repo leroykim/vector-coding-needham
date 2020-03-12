@@ -1,0 +1,23 @@
+function cycles_interpolated = normalizeCycles(imu_data,...
+                                                average_cycle_length)
+    n_cycle = length(imu_data);  
+    cycles_interpolated = cell(n_cycle,1);
+    for i = 1:n_cycle
+        cycle = imu_data{i,1};
+        if length(cycle) ~= average_cycle_length
+            for j = 1:9
+                cycle_length = length(cycle(:,1));
+                cycles_interpolated{i,1}(:,j) = ...
+                                        interp1(1:cycle_length, ...
+                                                cycle(:,j), ...
+                                                linspace(1,...
+                                                    cycle_length,...
+                                                    average_cycle_length)...
+                                            );
+            end
+        else
+            cycles_interpolated{i,1} = cycle;
+        end
+    end
+end
+
